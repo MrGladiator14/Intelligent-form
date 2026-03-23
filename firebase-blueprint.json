@@ -1,0 +1,97 @@
+{
+  "entities": {
+    "Form": {
+      "title": "Form",
+      "description": "A dynamic form definition created by an admin.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "fields": { 
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "label": { "type": "string" },
+              "type": { "type": "string", "enum": ["text", "number", "date", "file", "email"] },
+              "required": { "type": "boolean" }
+            }
+          }
+        },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "createdBy": { "type": "string" },
+        "allowedEmails": { 
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "List of user emails allowed to view this form. If empty, all authenticated users can view it."
+        }
+      },
+      "required": ["title", "fields", "createdAt", "createdBy"]
+    },
+    "Submission": {
+      "title": "Submission",
+      "description": "A response to a dynamic form.",
+      "type": "object",
+      "properties": {
+        "formId": { "type": "string" },
+        "data": { "type": "object" },
+        "userId": { "type": "string" },
+        "submittedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["formId", "data", "userId", "submittedAt"]
+    },
+    "Admission": {
+      "title": "Admission",
+      "description": "A school admission application form.",
+      "type": "object",
+      "properties": {
+        "studentName": {
+          "type": "string",
+          "description": "The full name of the student."
+        },
+        "age": {
+          "type": "integer",
+          "description": "The age of the student."
+        },
+        "gradeLevel": {
+          "type": "string",
+          "description": "The grade level the student is applying for.",
+          "enum": ["Kindergarten", "Grade 1", "Grade 2", "Grade 3", "Grade 4", "Grade 5", "Grade 6", "Grade 7", "Grade 8", "Grade 9", "Grade 10", "Grade 11", "Grade 12"]
+        },
+        "parentContact": {
+          "type": "string",
+          "description": "The parent's email or phone number."
+        },
+        "previousSchool": {
+          "type": "string",
+          "description": "The name of the previous school attended."
+        },
+        "submittedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The timestamp when the admission was submitted."
+        },
+        "userId": {
+          "type": "string",
+          "description": "The ID of the user who submitted the form."
+        }
+      },
+      "required": ["studentName", "age", "gradeLevel", "parentContact", "userId"]
+    }
+  },
+  "firestore": {
+    "/admissions/{admissionId}": {
+      "schema": "Admission",
+      "description": "Collection of school admission applications."
+    },
+    "/forms/{formId}": {
+      "schema": "Form",
+      "description": "Collection of dynamic form definitions."
+    },
+    "/submissions/{submissionId}": {
+      "schema": "Submission",
+      "description": "Collection of form submissions."
+    }
+  }
+}
